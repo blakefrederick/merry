@@ -17,9 +17,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <ThirdwebProvider authConfig={{
+      authUrl: '/api/auth',
+      domain: process.env.VERCEL_URL || domain,
+      loginRedirect: '/',
+    }}
+    network={network}>
+      <WalletProvider wallets={[wallet]}>
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
+      </WalletProvider>
+    </ThirdwebProvider>
   );
 };
 
